@@ -15,10 +15,10 @@ export default function PageHeader({ title, description, eyebrow, icon, actions 
   return (
     <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div className="space-y-2 min-w-0">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500">
+        <nav className="flex items-center gap-1.5 text-xs text-on-surface-variant">
           <Link href="/" className="hover:text-brand-600 transition-colors">หน้าแรก</Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-slate-700 font-medium">{eyebrow || title}</span>
+          <ChevronRight className="w-3.5 h-3.5 text-outline" />
+          <span className="text-on-surface-variant font-medium">{eyebrow || title}</span>
         </nav>
         <div className="flex items-center gap-3">
           {icon && (
@@ -28,7 +28,7 @@ export default function PageHeader({ title, description, eyebrow, icon, actions 
           )}
           <h1 className="text-2xl sm:text-3xl font-semibold text-ink">{title}</h1>
         </div>
-        {description && <p className="text-sm text-slate-500 max-w-2xl leading-relaxed">{description}</p>}
+        {description && <p className="text-sm text-on-surface-variant max-w-2xl leading-relaxed">{description}</p>}
       </div>
       {actions && <div className="shrink-0 flex flex-wrap items-center gap-2">{actions}</div>}
     </header>

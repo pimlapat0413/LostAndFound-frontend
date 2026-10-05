@@ -13,7 +13,7 @@ interface MatchListProps {
 
 export default function MatchList({ matches, emptyText, compact = false }: MatchListProps) {
   if (matches.length === 0) {
-    return emptyText ? <p className="text-xs text-gray-400">{emptyText}</p> : null;
+    return emptyText ? <p className="text-xs text-outline">{emptyText}</p> : null;
   }
 
   return (
@@ -24,22 +24,22 @@ export default function MatchList({ matches, emptyText, compact = false }: Match
           href={`/items/${item.id}`}
           className="flex items-center gap-3 p-2.5 rounded-2xl border border-amber-200 bg-amber-50/50 hover:bg-amber-50 hover:border-amber-300 transition-colors"
         >
-          <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 overflow-hidden shrink-0 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-white border border-line overflow-hidden shrink-0 flex items-center justify-center">
             {item.imageUrl ? (
               <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
             ) : (
-              <Package className="w-5 h-5 text-gray-400" />
+              <Package className="w-5 h-5 text-outline" />
             )}
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-600">
+              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-sm bg-white border border-line text-on-surface-variant">
                 {getReportType(item) === 'found' ? 'มีคนพบ' : 'มีคนทำหาย'}
               </span>
-              <p className="text-xs font-bold text-gray-900 truncate">{item.name}</p>
+              <p className="text-xs font-bold text-on-surface truncate">{item.name}</p>
             </div>
             {!compact && (
-              <p className="text-[11px] text-gray-500 truncate mt-0.5">{reasons.join(' • ')}</p>
+              <p className="text-[11px] text-on-surface-variant truncate mt-0.5">{reasons.join(' • ')}</p>
             )}
           </div>
           <div className="shrink-0 text-right">

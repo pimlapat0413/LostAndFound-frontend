@@ -18,13 +18,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-700 focus-visible:ring-brand-500 shadow-sm shadow-brand-600/20 disabled:bg-brand-200 disabled:cursor-not-allowed',
+    'btn-gradient text-white shadow-md focus-visible:ring-primary-container disabled:opacity-40 disabled:cursor-not-allowed',
   secondary:
-    'bg-white text-slate-700 border border-line hover:bg-slate-50 active:bg-slate-100 focus-visible:ring-brand-500 disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed',
+    'bg-white text-on-surface-variant border border-line hover:bg-surface active:bg-surface-container focus-visible:ring-brand-500 disabled:bg-surface disabled:text-outline disabled:border-line disabled:cursor-not-allowed',
   danger:
-    'bg-red-500 text-white hover:bg-red-600 active:bg-red-700 focus-visible:ring-red-500 shadow-sm disabled:bg-red-300 disabled:cursor-not-allowed',
+    'bg-red-500 text-white hover:bg-red-600 active:bg-red-700 focus-visible:ring-red-500 shadow-xs disabled:bg-red-300 disabled:cursor-not-allowed',
   ghost:
-    'bg-transparent text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus-visible:ring-brand-500 disabled:text-gray-300 disabled:bg-transparent disabled:cursor-not-allowed',
+    'bg-transparent text-on-surface-variant hover:bg-surface-container active:bg-surface-variant focus-visible:ring-brand-500 disabled:text-outline-variant disabled:bg-transparent disabled:cursor-not-allowed',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -58,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         disabled={isDisabled}
-        className={`inline-flex items-center justify-center transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+        className={`inline-flex items-center justify-center transition-colors duration-150 outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 ${
           variantStyles[variant]
         } ${sizeStyles[size]} ${fullWidth ? 'w-full' : ''} ${className}`}
         {...props}

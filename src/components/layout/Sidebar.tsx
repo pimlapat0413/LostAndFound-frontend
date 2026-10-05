@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
   Shield,
   Home,
@@ -10,13 +10,9 @@ import {
   PackageSearch,
   HandHelping,
   ClipboardList,
-  Lock,
-  KeyRound,
-  AlertCircle,
   X,
   ArrowRight
 } from 'lucide-react';
-import Modal from '@/components/ui/Modal';
 import Logo from '@/components/layout/Logo';
 import { useRole } from '@/context/RoleContext';
 
@@ -39,7 +35,7 @@ const navGroups: { title: string; items: NavItem[] }[] = [
       { label: 'หน้าแรก', icon: Home, href: '/' },
       { label: 'ค้นหาของหาย', icon: PackageSearch, href: '/items' },
       { label: 'แจ้งของหาย / พบของ', icon: FilePlus2, href: '/report' },
-      { label: 'ขอรับของคืน', icon: HandHelping, href: '/claim' },
+      { label: 'รับของคืน / ส่งคืนเจ้าของ', icon: HandHelping, href: '/claim' },
       { label: 'รายการของฉัน', icon: ClipboardList, href: '/my-items' },
     ],
   },
@@ -51,44 +47,24 @@ const navGroups: { title: string; items: NavItem[] }[] = [
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { isAdmin, setCurrentRole } = useRole();
-
-  // ขอรหัสผ่านเมื่อผู้ใช้ที่ไม่ใช่แอดมินกดเมนูแอดมิน
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [inputPassword, setInputPassword] = useState('');
-  const [authError, setAuthError] = useState(false);
+  // สิทธิ์เจ้าหน้าที่มาจาก Core Hub (core role staff/admin) — ผู้ใช้ทั่วไปไม่เห็นเมนูเจ้าหน้าที่
+  const { isAdmin } = useRole();
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
-    if (item.adminOnly && !isAdmin) {
-      e.preventDefault();
-      setInputPassword('');
-      setAuthError(false);
-      setIsAuthModalOpen(true);
-    } else if (window.innerWidth < 1024) {
-      onClose();
-    }
+  const handleNavClick = () => {
+    if (window.innerWidth < 1024) onClose();
   };
 
-  const verifyAdmin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputPassword === 'admin123') {
-      setCurrentRole('admin');
-      setIsAuthModalOpen(false);
-      setInputPassword('');
-      router.push('/admin');
-    } else {
-      setAuthError(true);
-    }
-  };
+  const visibleGroups = navGroups
+    .map((group) => ({ ...group, items: group.items.filter((item) => !item.adminOnly || isAdmin) }))
+    .filter((group) => group.items.length > 0);
 
   return (
     <>
       {/* Mobile overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-[2px] lg:hidden" onClick={onClose} />
+        <button type="button" aria-label="ปิดเมนู" className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-[2px] lg:hidden cursor-default" onClick={onClose} />
       )}
 
       <aside
@@ -101,16 +77,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <Link href="/" onClick={() => window.innerWidth < 1024 && onClose()}>
             <Logo />
           </Link>
-          <button onClick={onClose} className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100" aria-label="ปิดเมนู">
+          <button onClick={onClose} className="lg:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container" aria-label="ปิดเมนู">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-3 pt-4 pb-6 space-y-6 overflow-y-auto">
-          {navGroups.map((group) => (
+          {visibleGroups.map((group) => (
             <div key={group.title} className="space-y-1">
-              <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{group.title}</p>
+              <p className="px-3 pb-1 text-[11px] font-semibold text-outline">{group.title}</p>
               {group.items.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
@@ -118,16 +94,15 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={(e) => handleNavClick(e, item)}
+                    onClick={handleNavClick}
                     className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${
                       active
                         ? 'bg-brand-50 text-brand-700 font-semibold'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-ink'
+                        : 'text-on-surface-variant hover:bg-surface hover:text-ink'
                     }`}
                   >
-                    <Icon className={`w-[18px] h-[18px] ${active ? 'text-brand-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                    <Icon className={`w-[18px] h-[18px] ${active ? 'text-brand-600' : 'text-outline group-hover:text-on-surface-variant'}`} />
                     <span className="flex-1">{item.label}</span>
-                    {item.adminOnly && !isAdmin && <Lock className="w-3.5 h-3.5 text-slate-400" />}
                     {active && <span className="w-1.5 h-1.5 rounded-full bg-brand-600" />}
                   </Link>
                 );
@@ -154,48 +129,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </div>
         </div>
       </aside>
-
-      {isAuthModalOpen && (
-        <Modal
-          isOpen={isAuthModalOpen}
-          onClose={() => { setIsAuthModalOpen(false); setInputPassword(''); }}
-          title="ยืนยันสิทธิ์ผู้ดูแลระบบ"
-        >
-          <form onSubmit={verifyAdmin} className="space-y-4 text-sm">
-            <div className="p-3.5 bg-brand-50 text-brand-700 rounded-xl flex items-start gap-3">
-              <KeyRound className="w-5 h-5 shrink-0 mt-0.5" />
-              <p className="text-xs">กรุณากรอกรหัสผ่านเพื่อเข้าหน้าแอดมิน (รหัสทดสอบ: admin123)</p>
-            </div>
-            {authError && (
-              <div className="p-3 bg-red-50 text-red-700 border border-red-200 rounded-xl flex items-center gap-2 text-xs font-semibold">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง
-              </div>
-            )}
-            <input
-              type="password"
-              value={inputPassword}
-              onChange={(e) => setInputPassword(e.target.value)}
-              placeholder="กรอกรหัสผ่าน..."
-              autoFocus
-              required
-              className="w-full px-4 py-2.5 bg-white border border-line rounded-xl focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
-            />
-            <div className="flex justify-end gap-2 pt-2">
-              <button
-                type="button"
-                onClick={() => { setIsAuthModalOpen(false); setInputPassword(''); }}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs"
-              >
-                ยกเลิก
-              </button>
-              <button type="submit" className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl text-xs">
-                ยืนยัน
-              </button>
-            </div>
-          </form>
-        </Modal>
-      )}
     </>
   );
 }

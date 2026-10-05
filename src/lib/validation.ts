@@ -50,3 +50,12 @@ export function focusFirstInvalid(fields: MissingField[]) {
     (el as HTMLInputElement).focus({ preventScroll: true });
   }
 }
+
+// เทียบคำตอบลับแบบหลวม (ตรงกับ backend) ใช้แสดงผลให้แอดมินดูว่าคำตอบตรงหรือไม่
+export function isSecretAnswerMatch(given: string, expected: string) {
+  const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
+  const a = norm(given);
+  const b = norm(expected);
+  if (!a || !b) return false;
+  return a === b || (a.length >= 2 && b.includes(a)) || (b.length >= 2 && a.includes(b));
+}

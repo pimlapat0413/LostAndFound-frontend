@@ -1,58 +1,19 @@
-export interface LostItem {
-  id: string;
-  code: string; // e.g. LF-2024-00048
-  name: string;
-  description: string;
-  category: string;
-  color: string;
-  brand: string;
-  imageUrl: string;
-  thumbnails: string[];
-  location: string;
-  locationDetail: string;
-  faculty: string;
-  building: string;
-  floor: string;
-  room: string;
-  dateLost: string;
-  timeLost: string;
-  status: 'searching' | 'found' | 'returned';
-  reporterName: string;
-  reporterStudentId: string;
-  reporterEmail: string;
-  reporterPhone: string;
-  reporterContact: string; // Line ID etc
-  reporterAvatar: string;
-  createdAt: string;
-  pinX?: number; // ละติจูดของหมุดบนแผนที่ (Leaflet)
-  pinY?: number; // ลองจิจูดของหมุดบนแผนที่ (Leaflet)
-  reportType?: 'lost' | 'found'; // ไม่ระบุ = 'lost' (ข้อมูลเก่า)
-  urgency?: 'normal' | 'high';
-  secretQuestion?: string; // คำถามยืนยันเจ้าของ (ไม่แสดงสาธารณะ)
-  secretAnswer?: string;
-}
+// type ของข้อมูลจาก API สร้างจาก backend/openapi.json (pnpm --filter frontend gen:api) — ห้ามเขียนเอง
+// ตามมาตรฐาน tech-stack.md ข้อ 3 · เมื่อ backend เปลี่ยน endpoint ให้ generate ใหม่ใน PR เดียวกัน
+import type { components } from './api';
 
-export interface ClaimRequest {
-  requestId: string;
-  itemId: string;
-  itemName: string;
-  itemCode: string;
-  claimerName: string;
-  studentId: string;
-  department: string;
-  claimDateTime: string;
-  claimLocation: string;
-  contact: string;
-  note: string;
-  requestDate: string;
-  status: 'pending' | 'approved' | 'rejected' | 'completed';
-  secretAnswerGiven?: string;
-  handoverCode?: string; // รหัส 6 หลักที่ออกให้เมื่ออนุมัติ
-  approvedAt?: string;
-  handedOverAt?: string;
-  handedOverBy?: string;
-  isNewItemReport?: boolean; // ข้อมูลเก่าที่ถูกบันทึกปนมาในรายการคำขอ
-}
+type Schemas = components['schemas'];
+
+/** รายการแจ้งของหาย / แจ้งพบของ (GET /api/v1/items) */
+export type LostItem = Schemas['ItemView'];
+/** คำขอรับคืน / แจ้งส่งคืน (GET /api/v1/claims) */
+export type ClaimRequest = Schemas['ClaimView'];
+/** ผู้ใช้ในระบบนี้ (GET /api/v1/members) */
+export type ApiUser = Schemas['MemberView'];
+/** รายการที่อาจเป็นชิ้นเดียวกัน (GET /api/v1/items/:id/matches) */
+export type ApiMatch = Schemas['MatchView'];
+export type NewItemInput = Schemas['CreateItemDto'];
+export type NewClaimInput = Schemas['CreateClaimDto'];
 
 export interface User {
   id: string;

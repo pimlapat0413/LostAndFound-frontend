@@ -44,9 +44,9 @@ const variantStyles: Record<
     pulse: 'bg-brand-500',
   },
   pending: {
-    container: 'bg-gray-100 text-gray-700 border-gray-200',
+    container: 'bg-surface-container text-on-surface-variant border-line',
     dot: 'bg-gray-400',
-    pulse: 'bg-gray-300',
+    pulse: 'bg-outline-variant',
   },
 };
 

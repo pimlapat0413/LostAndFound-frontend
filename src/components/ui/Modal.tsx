@@ -91,32 +91,32 @@ export const Modal: React.FC<ModalProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-ink/50 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-ink/50 backdrop-blur-xs transition-opacity"
         onClick={closeOnOverlayClick ? onClose : undefined}
       />
 
       {/* Dialog Box */}
       <div
-        className={`relative w-full bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 overflow-hidden z-10 my-8 transform transition-all duration-200 ${
+        className={`relative w-full bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 overflow-hidden z-10 my-4 md:my-8 transform transition-all duration-200 ${
           animateShow ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-4 opacity-0'
         } ${sizeClasses[size]} ${className}`}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-line">
+          <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-line">
             <div className="flex flex-col pr-4">
               {title && (
                 <h3 className="text-lg font-display font-semibold text-ink leading-6">{title}</h3>
               )}
               {description && (
-                <p className="text-sm text-gray-500 mt-0.5">{description}</p>
+                <p className="text-sm text-on-surface-variant mt-0.5">{description}</p>
               )}
             </div>
             {showCloseButton && (
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1.5 text-outline hover:text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors"
                 aria-label="ปิด"
               >
                 <X className="w-5 h-5" />
@@ -126,13 +126,13 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Body */}
-        <div className="px-6 py-5 max-h-[calc(85vh-130px)] overflow-y-auto text-gray-700">
+        <div className="px-4 md:px-6 py-4 md:py-5 max-h-[calc(85vh-130px)] supports-[height:100dvh]:max-h-[calc(85dvh-130px)] overflow-y-auto text-on-surface-variant">
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-3 px-6 py-4 bg-gray-50/80 border-t border-gray-100">
+          <div className="flex flex-wrap items-center justify-end gap-3 px-4 md:px-6 py-4 bg-surface/80 border-t border-line">
             {footer}
           </div>
         )}

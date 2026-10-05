@@ -43,10 +43,10 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
 
     const inputId = id || (label ? `input-${label.replace(/\s+/g, '-').toLowerCase()}` : undefined);
 
-    const baseControlClasses = `w-full rounded-xl border transition-colors duration-150 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed ${
+    const baseControlClasses = `w-full rounded-xl border transition-colors duration-150 text-sm text-on-surface placeholder:text-outline focus:outline-hidden focus:ring-2 disabled:bg-surface-container disabled:text-outline disabled:cursor-not-allowed ${
       error
         ? 'border-red-400 bg-red-50/30 focus:border-red-500 focus:ring-red-200'
-        : 'border-line bg-white hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-50'
+        : 'border-line bg-white hover:border-outline-variant focus:border-brand-500 focus:ring-4 focus:ring-brand-50'
     } ${icon ? 'pl-10' : 'pl-3.5'} pr-3.5 py-2.5`;
 
     return (
@@ -54,7 +54,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-gray-700 select-none flex items-center gap-1"
+            className="text-sm font-medium text-on-surface-variant select-none flex items-center gap-1"
           >
             <span>{label}</span>
             {required && <span className="text-red-500">*</span>}
@@ -64,7 +64,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
         <div className="relative flex items-center">
           {icon && (
             <div
-              className={`absolute left-3.5 pointer-events-none text-gray-400 flex items-center justify-center ${
+              className={`absolute left-3.5 pointer-events-none text-outline flex items-center justify-center ${
                 as === 'textarea' ? 'top-3' : 'top-1/2 -translate-y-1/2'
               }`}
             >
@@ -93,12 +93,12 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
         </div>
 
         {error ? (
-          <p className="text-xs text-red-600 flex items-center gap-1 mt-0.5 animate-fadeIn">
+          <p className="text-xs text-red-600 flex items-center gap-1 mt-0.5 animate-fade-in">
             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </p>
         ) : helperText ? (
-          <p className="text-xs text-gray-500 mt-0.5">{helperText}</p>
+          <p className="text-xs text-on-surface-variant mt-0.5">{helperText}</p>
         ) : null}
       </div>
     );
